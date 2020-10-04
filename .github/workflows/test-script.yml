@@ -94,11 +94,19 @@ jobs:
 
       - uses: r-lib/actions/setup-r@master
 
-      - name: Session info
+      - name: Session info - pre
         run: |
-          options(width = 100)
-          pkgs <- installed.packages()[, "Package"]
-          sessioninfo::session_info(pkgs, include_base = TRUE)
+          sessionInfo()
+        shell: Rscript {0}
+
+      - name: Install requirements
+        run: |
+          source("Setup.R")
+        shell: Rscript {0}
+
+      - name: Session info - post
+        run: |
+          sessionInfo()
         shell: Rscript {0}
 
       - name: Upload check results
@@ -162,11 +170,19 @@ jobs:
           ## Edit below if you have any Windows system dependencies
         shell: Rscript {0}
 
-      - name: Session info
+      - name: Session info - pre
         run: |
-          options(width = 100)
-          pkgs <- installed.packages()[, "Package"]
-          sessioninfo::session_info(pkgs, include_base = TRUE)
+          sessionInfo()
+        shell: Rscript {0}
+
+      - name: Install requirements
+        run: |
+          source("Setup.R")
+        shell: Rscript {0}
+
+      - name: Session info - post
+        run: |
+          sessionInfo()
         shell: Rscript {0}
 
       - name: Upload check results
