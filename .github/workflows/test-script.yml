@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         R: [ '3.6', '4.0' ]
-    name: ${{ runner.os }}-R-${{ matrix.R }}
+    name: linux-R-${{ matrix.R }}
     steps:
       - uses: actions/checkout@master
       - name: Setup R
@@ -48,7 +48,7 @@ jobs:
     strategy:
       matrix:
         R: [ '3.6', '4.0' ]
-    name: ${{ runner.os }}-R-${{ matrix.R }}
+    name: windows-R-${{ matrix.R }}
     steps:
       - uses: actions/checkout@master
       - name: Setup R
@@ -80,7 +80,7 @@ jobs:
     strategy:
       matrix:
         R: [ '3.6', '4.0' ]
-    name: ${{ runner.os }}-R-${{ matrix.R }}
+    name: macOS-R-${{ matrix.R }}
     steps:
       - uses: actions/checkout@master
       - name: Setup R
