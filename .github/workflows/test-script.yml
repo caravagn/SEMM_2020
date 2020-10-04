@@ -275,7 +275,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r@master
         with:
-          r-version: 3.6.0
+          r-version: 3.6
 
       - name: Session info - pre
         run: |
@@ -331,7 +331,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r@master
         with:
-          r-version: 3.6.0
+          r-version: 3.6
 
       - name: Install Linux system dependencies
         if: runner.os == 'Linux'
