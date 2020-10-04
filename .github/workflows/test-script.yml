@@ -10,96 +10,19 @@ env:
   cache-version: 'cache-v1'
 
 jobs:
-
-  define-docker-info:
-    runs-on: ubuntu-latest
-    outputs:
-      imagename: ${{ steps.findinfo.outputs.imagename }}
-      biocversion: ${{ steps.findinfo.outputs.biocversion }}
-    steps:
-      - id: findinfo
-        run: |
-          biocversion="release"
-          imagename="bioconductor/bioconductor_docker:${biocversion}"
-          echo $imagename
-          echo $biocversion
-
-          ## Save the information for the next job
-          echo "::set-output name=imagename::${imagename}"
-          echo "::set-output name=biocversion::${biocversion}"
-
-
-  linux:
-    runs-on: ubuntu-latest
-    needs: define-docker-info
-
+  build:
+    runs-on: ubuntu-18.04
     strategy:
       matrix:
         R: [ '3.6', '4.0' ]
-    name: linux-R-${{ matrix.R }}
-
-    ## Environment variables unique to this job.
-    env:
-      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      TZ: UTC
-      NOT_CRAN: true
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-
-    container:
-      image: ${{ needs.define-docker-info.outputs.imagename }}
-      volumes:
-        - /home/runner/work/_temp/Library:/usr/local/lib/R/host-site-library
-    
+    name: R ${{ matrix.R }} sample
     steps:
-      - name: Install latest git
-        run: |
-          ## git version provided
-          git --version
-          ## to be able to install software properties
-          sudo apt-get update -y
-          ## to be able to use add-apt-repository
-          sudo apt-get install software-properties-common -y
-          ## to use stable releases of git that are already in a PPA at
-          ## https://launchpad.net/~git-core/+archive/ubuntu/candidate
-          sudo add-apt-repository ppa:git-core/candidate -y
-          ## Update
-          sudo apt-get update -y
-          ## Upgrade git and other tools
-          sudo apt-get upgrade -y
-          ## latest git version
-          git --version
-        shell: bash {0}
-
-      - uses: actions/upload-artifact@v2
-
-      - uses: actions/checkout@v2
-
+      - uses: actions/checkout@master
       - name: Setup R
-        uses: r-lib/actions/setup-R@master
+        uses: r-lib/actions/setup-R@v1
         with:
           r-version: ${{ matrix.R }}
       - run: Rscript -e 'print("hello")'
-
-      - name: Install Linux system dependencies
-        env:
-          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
-        run: |
-          Rscript -e "remotes::install_github('r-hub/sysreqs')"
-          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
-          sudo -s eval "$sysreqs"
-
-      - name: SessionInfo
-        run: |
-          sessionInfo()
-        shell: Rscript {0}
-
-      - name: Upload check results
-        if: failure()
-        uses: actions/upload-artifact@master
-        with:
-          name: ${{ runner.os }}-R-${{ matrix.R }}-results
-          path: check
 
   windows:
     runs-on: windows-latest
