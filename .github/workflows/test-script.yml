@@ -7,6 +7,25 @@ on:
       - master
 
 jobs:
+
+  define-docker-info:
+    runs-on: ubuntu-latest
+    outputs:
+      imagename: ${{ steps.findinfo.outputs.imagename }}
+      biocversion: ${{ steps.findinfo.outputs.biocversion }}
+    steps:
+      - id: findinfo
+        run: |
+          biocversion="release"
+          imagename="bioconductor/bioconductor_docker:${biocversion}"
+          echo $imagename
+          echo $biocversion
+
+          ## Save the information for the next job
+          echo "::set-output name=imagename::${imagename}"
+          echo "::set-output name=biocversion::${biocversion}"
+
+
   linux:
     runs-on: ubuntu-latest
 
