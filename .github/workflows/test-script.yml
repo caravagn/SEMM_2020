@@ -1,10 +1,10 @@
+name: test-script
+
+
 on:
   push:
     branches:
       - master
-
-name: test-script
-
 
 jobs:
   linux:
@@ -42,6 +42,8 @@ jobs:
           ## latest git version
           git --version
         shell: bash {0}
+
+      - uses: actions/upload-artifact@v2
 
       - uses: actions/checkout@v2
 
