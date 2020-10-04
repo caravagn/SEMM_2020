@@ -301,7 +301,7 @@ jobs:
 
   win-macOS-3_6:
     runs-on: ${{ matrix.config.os }}
-    needs: [define-docker-info, linux-R-3.6]
+    needs: [define-docker-info, linux-R-3_6]
 
     name: ${{ matrix.config.os }}-R-3.6
 
