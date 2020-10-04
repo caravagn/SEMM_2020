@@ -14,6 +14,14 @@ jobs:
       matrix:
         R: [ '3.6', '4.0' ]
     name: linux-R-${{ matrix.R }}
+
+    ## Environment variables unique to this job.
+    env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      TZ: UTC
+      NOT_CRAN: true
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     
     steps:
       - name: Install latest git
