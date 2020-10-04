@@ -124,7 +124,7 @@ jobs:
 
   win-macOS-stable:
     runs-on: ${{ matrix.config.os }}
-    needs: [define-docker-info, linux-R-stable]
+    needs: [define-docker-info]
 
     name: ${{ matrix.config.os }}-R-stable
 
@@ -278,7 +278,7 @@ jobs:
 
       - name: Install requirements
         run: |
-          source("Setup.R")
+          source("Setup_36.R")
         shell: Rscript {0}
 
       - name: Session info - post
@@ -301,7 +301,7 @@ jobs:
 
   win-macOS-3_6:
     runs-on: ${{ matrix.config.os }}
-    needs: [define-docker-info, linux-R-3_6]
+    needs: [define-docker-info]
 
     name: ${{ matrix.config.os }}-R-3.6
 
@@ -358,7 +358,7 @@ jobs:
 
       - name: Install requirements
         run: |
-          source("Setup.R")
+          source("Setup_36.R")
         shell: Rscript {0}
 
       - name: Session info - post
