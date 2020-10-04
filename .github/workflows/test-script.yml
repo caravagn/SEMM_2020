@@ -35,7 +35,7 @@ jobs:
           git --version
         shell: bash {0}
 
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
 
       - name: Setup R
         uses: r-lib/actions/setup-R@v1
@@ -71,7 +71,7 @@ jobs:
         R: [ '3.6', '4.0' ]
     name: windows-R-${{ matrix.R }}
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - name: Setup R
         uses: r-lib/actions/setup-R@v1
         with:
@@ -103,7 +103,7 @@ jobs:
         R: [ '3.6', '4.0' ]
     name: macOS-R-${{ matrix.R }}
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - name: Setup R
         uses: r-lib/actions/setup-R@v1
         with:
