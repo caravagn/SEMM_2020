@@ -207,7 +207,7 @@ jobs:
 # with R.36
 
 
-  linux-R-3.6:
+  linux-R-3_6:
     ## This job then checks the R package using the Bioconductor docker that
     ## was defined by the previous job. This job will determine what version of
     ## R to use for the macOS and Windows builds on the next job.
@@ -299,7 +299,7 @@ jobs:
           name: ${{ runner.os }}-biocdocker-biocbranch-${{ needs.define-docker-info.outputs.biocversion }}-r-${{ steps.findrversion.outputs.rversion }}-bioc-${{ steps.findrversion.outputs.biocversionnum }}-results
           path: check
 
-  win-macOS-3.6:
+  win-macOS-3_6:
     runs-on: ${{ matrix.config.os }}
     needs: [define-docker-info, linux-R-3.6]
 
