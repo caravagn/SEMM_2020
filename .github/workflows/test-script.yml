@@ -7,39 +7,22 @@ name: test-script
 
 
 jobs:
-  test-script:
-    runs-on: ${{ matrix.config.os }}
-
-    name: ${{ matrix.config.os }}
+  linux:
+    runs-on: ubuntu-latest
 
     strategy:
-      fail-fast: false
-      matrix:
-        config:
-          ## Comment/Un-comment in case you also want to run other versions
-          - {os: windows-latest}
-          - {os: macOS-latest}
-          - {os: ubuntu-latest}
-
       matrix:
         R: [ '3.6', '4.0' ]
-      name: ${{ matrix.os }}-R-${{ matrix.R }}
-
-    env:
-      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM: ${{ matrix.config.rspm }}
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-
+    name: ${{ runner.os }}-R-${{ matrix.R }}
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup R from r-lib
-        uses: r-lib/actions/setup-r@master
+      - uses: actions/checkout@master
+      - name: Setup R
+        uses: r-lib/actions/setup-R@v1
         with:
           r-version: ${{ matrix.R }}
+      - run: Rscript -e 'print("hello")'
 
       - name: Install Linux system dependencies
-        if: runner.os == 'Linux'
         env:
           RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
         run: |
@@ -47,8 +30,66 @@ jobs:
           sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
           sudo -s eval "$sysreqs"
 
+      - name: SessionInfo
+        run: |
+          sessionInfo()
+        shell: Rscript {0}
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ runner.os }}-R-${{ matrix.R }}-results
+          path: check
+
+  windows:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        R: [ '3.6', '4.0' ]
+    name: ${{ runner.os }}-R-${{ matrix.R }}
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup R
+        uses: r-lib/actions/setup-R@v1
+        with:
+          r-version: ${{ matrix.R }}
+      - run: Rscript -e 'print("hello")'
+
+      - name: Install Windows system dependencies
+        run: |
+          ## Edit below if you have any Windows system dependencies
+        shell: Rscript {0}
+
+      - name: SessionInfo
+        run: |
+          sessionInfo()
+        shell: Rscript {0}
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ runner.os }}-R-${{ matrix.R }}-results
+          path: check
+
+  macOS:
+    runs-on: macOS-latest
+
+    strategy:
+      matrix:
+        R: [ '3.6', '4.0' ]
+    name: ${{ runner.os }}-R-${{ matrix.R }}
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup R
+        uses: r-lib/actions/setup-R@v1
+        with:
+          r-version: ${{ matrix.R }}
+      - run: Rscript -e 'print("hello")'
+
       - name: Install macOS system dependencies
-        if: matrix.config.os == 'macOS-latest'
         run: |
           ## Enable installing XML from source if needed
           brew install libxml2
@@ -58,17 +99,10 @@ jobs:
           ## https://github.com/r-lib/usethis/commit/f1f1e0d10c1ebc75fd4c18fa7e2de4551fd9978f#diff-9bfee71065492f63457918efcd912cf2
           brew install imagemagick@6
 
-      - name: Install Windows system dependencies
-        if: runner.os == 'Windows'
-        run: |
-          ## Edit below if you have any Windows system dependencies
-        shell: Rscript {0}
-
-      - name: Install BiocManager
+      - name: SessionInfo
         run: |
           sessionInfo()
         shell: Rscript {0}
-
 
       - name: Upload check results
         if: failure()
