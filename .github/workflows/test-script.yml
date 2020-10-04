@@ -6,6 +6,9 @@ on:
     branches:
       - master
 
+env:
+  cache-version: 'cache-v1'
+
 jobs:
 
   define-docker-info:
@@ -42,6 +45,11 @@ jobs:
       NOT_CRAN: true
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    container:
+      image: ${{ needs.define-docker-info.outputs.imagename }}
+      volumes:
+        - /home/runner/work/_temp/Library:/usr/local/lib/R/host-site-library
     
     steps:
       - name: Install latest git
