@@ -122,7 +122,7 @@ jobs:
           name: ${{ runner.os }}-biocdocker-biocbranch-${{ needs.define-docker-info.outputs.biocversion }}-r-${{ steps.findrversion.outputs.rversion }}-bioc-${{ steps.findrversion.outputs.biocversionnum }}-results
           path: check
 
-  R-CMD-check-r-lib:
+  win-macOS-stable:
     runs-on: ${{ matrix.config.os }}
     needs: [define-docker-info, linux-R-stable]
 
@@ -299,7 +299,7 @@ jobs:
           name: ${{ runner.os }}-biocdocker-biocbranch-${{ needs.define-docker-info.outputs.biocversion }}-r-${{ steps.findrversion.outputs.rversion }}-bioc-${{ steps.findrversion.outputs.biocversionnum }}-results
           path: check
 
-  R-CMD-check-r-lib:
+  win-macOS-3.6:
     runs-on: ${{ matrix.config.os }}
     needs: [define-docker-info, linux-R-3.6]
 
