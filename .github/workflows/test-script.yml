@@ -124,9 +124,9 @@ jobs:
           name: ${{ runner.os }}-biocdocker-biocbranch-${{ needs.define-docker-info.outputs.biocversion }}-r-${{ steps.findrversion.outputs.rversion }}-bioc-${{ steps.findrversion.outputs.biocversionnum }}-results
           path: check
 
-  win-macOS-stable:
+  linux-win-macOS-stable:
     runs-on: ${{ matrix.config.os }}
-    needs: [define-docker-info]
+    #needs: [define-docker-info]
 
     name: ${{ matrix.config.os }}-R-stable
 
@@ -137,7 +137,7 @@ jobs:
           ## Comment/Un-comment in case you also want to run other versions
           - {os: windows-latest}
           - {os: macOS-latest}
-          # - {os: ubuntu-16.04, rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+          - {os: ubuntu-latest}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -159,9 +159,7 @@ jobs:
         env:
           RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
         run: |
-          Rscript -e "remotes::install_github('r-hub/sysreqs')"
-          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
-          sudo -s eval "$sysreqs"
+          sudo apt-get install libcurl4-openssl-dev libglpk-dev libmagick++-dev libnlopt-dev
 
       - name: Install macOS system dependencies
         if: matrix.config.os == 'macOS-latest'
@@ -305,9 +303,9 @@ jobs:
           name: ${{ runner.os }}-biocdocker-biocbranch-${{ needs.define-docker-info.outputs.biocversion }}-r-${{ steps.findrversion.outputs.rversion }}-bioc-${{ steps.findrversion.outputs.biocversionnum }}-results
           path: check
 
-  win-macOS-3_6:
+  linux-win-macOS-3_6:
     runs-on: ${{ matrix.config.os }}
-    needs: [define-docker-info]
+    #needs: [define-docker-info]
 
     name: ${{ matrix.config.os }}-R-3.6
 
@@ -318,6 +316,7 @@ jobs:
           ## Comment/Un-comment in case you also want to run other versions
           - {os: windows-latest}
           - {os: macOS-latest}
+          - {os: linux-latest}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -338,9 +337,7 @@ jobs:
         env:
           RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
         run: |
-          Rscript -e "remotes::install_github('r-hub/sysreqs')"
-          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
-          sudo -s eval "$sysreqs"
+          sudo apt-get install libcurl4-openssl-dev libglpk-dev libmagick++-dev libnlopt-dev
 
       - name: Install macOS system dependencies
         if: matrix.config.os == 'macOS-latest'
