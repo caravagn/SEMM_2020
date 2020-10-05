@@ -69,7 +69,7 @@ jobs:
         if: "!contains(github.event.head_commit.message, '/nocache')"
         uses: actions/cache@v1
         with:
-          path: /home/runner/work/_temp/Library
+          path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-renv-R-3-6-${{ hashFiles('Setup.R') }}
 
       - name: Install requirements
@@ -142,7 +142,7 @@ jobs:
         if: "!contains(github.event.head_commit.message, '/nocache')"
         uses: actions/cache@v1
         with:
-          path: /home/runner/work/_temp/Library
+          path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-renv-R-3-6-${{ hashFiles('Setup_36.R') }}
 
       - name: Install requirements
