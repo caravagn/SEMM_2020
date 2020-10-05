@@ -66,12 +66,11 @@ jobs:
         shell: Rscript {0}
 
       - name: Check cache
+        if: "!contains(github.event.head_commit.message, '/nocache')"
         uses: actions/cache@v1
         with:
           path: /home/runner/work/_temp/Library
-          key: ${{ runner.os }}-renv-R-3-6-${{ hashFiles('**/renv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-renv-R-3-6-
+          key: ${{ runner.os }}-renv-R-3-6-${{ hashFiles('Setup.R') }}
 
       - name: Install requirements
         run: |
@@ -84,13 +83,6 @@ jobs:
           library(rmarkdown)
           rmarkdown::render("Markdown_CE_Giulio.Rmd")
         shell: Rscript {0}
-
-      - name: Upload check results
-        if: failure()
-        uses: actions/upload-artifact@master
-        with:
-          name: ${{ runner.os }}-biocbranch-${{ needs.define-docker-info.outputs.biocversion }}-r-${{ needs.R-CMD-check-bioc.outputs.rversion }}-bioc-${{ needs.define-docker-info.outputs.biocversion }}-results
-          path: check
 
 # with R.36
 
@@ -147,12 +139,11 @@ jobs:
         shell: Rscript {0}
 
       - name: Check cache
+        if: "!contains(github.event.head_commit.message, '/nocache')"
         uses: actions/cache@v1
         with:
           path: /home/runner/work/_temp/Library
-          key: ${{ runner.os }}-renv-R-3-6-${{ hashFiles('**/renv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-renv-R-3-6-
+          key: ${{ runner.os }}-renv-R-3-6-${{ hashFiles('Setup_36.R') }}
 
       - name: Install requirements
         run: |
@@ -166,9 +157,3 @@ jobs:
           rmarkdown::render("Markdown_CE_Giulio.Rmd")
         shell: Rscript {0}
 
-      - name: Upload check results
-        if: failure()
-        uses: actions/upload-artifact@master
-        with:
-          name: ${{ runner.os }}-biocbranch-${{ needs.define-docker-info.outputs.biocversion }}-r-${{ needs.R-CMD-check-bioc.outputs.rversion }}-bioc-${{ needs.define-docker-info.outputs.biocversion }}-results
-          path: check
