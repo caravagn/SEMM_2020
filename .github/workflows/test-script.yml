@@ -40,18 +40,16 @@ jobs:
 
       - name: Setup R from r-lib
         uses: r-lib/actions/setup-r@master
-        with:
-          r-version: ${{ needs.R-CMD-check-bioc.outputs.rversion }}
 
       - name: Install Linux system dependencies
-        if: runner.os == 'Linux'
+        if: startsWith(runner.os, 'Linux')
         env:
           RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
         run: |
           sudo apt-get install libcurl4-openssl-dev libglpk-dev libmagick++-dev libnlopt-dev
 
       - name: Install macOS system dependencies
-        if: matrix.config.os == 'macOS-latest'
+        if: startsWith(runner.os, 'macOS')
         run: |
           ## Enable installing XML from source if needed
           brew install libxml2
@@ -62,48 +60,22 @@ jobs:
           brew install imagemagick@6
 
       - name: Install Windows system dependencies
-        if: runner.os == 'Windows'
+        if: startsWith(runner.os, 'Windows')
         run: |
           ## Edit below if you have any Windows system dependencies
         shell: Rscript {0}
 
-      - name: Session info - pre
-        run: |
-          sessionInfo()
-        shell: Rscript {0}
-
-      - uses: actions/cache@v2
-        if: startsWith(runner.os, 'Linux')
+      - name: Check cache
+        uses: actions/cache@v1
         with:
-          path: ~/.local/share/renv
-          key: ${{ runner.os }}-renv-R-stable-${{ hashFiles('**/renv.lock') }}
+          path: /home/runner/work/_temp/Library
+          key: ${{ runner.os }}-renv-R-3-6-${{ hashFiles('**/renv.lock') }}
           restore-keys: |
-            ${{ runner.os }}-renv-R-stable-
-
-      - uses: actions/cache@v2
-        if: startsWith(runner.os, 'macOS')
-        with:
-          path: ~/Library/Application Support/renv
-          key: ${{ runner.os }}-renv-R-stable-${{ hashFiles('**/renv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-renv-R-stable-
-
-      - uses: actions/cache@v2
-        if: startsWith(runner.os, 'Windows')
-        with:
-          path: ~\AppData\Local\renv
-          key: ${{ runner.os }}-renv-R-stable-${{ hashFiles('**/renv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-renv-R-stable-
-
+            ${{ runner.os }}-renv-R-3-6-
 
       - name: Install requirements
         run: |
           source("Setup.R")
-        shell: Rscript {0}
-
-      - name: Session info - post
-        run: |
           sessionInfo()
         shell: Rscript {0}
 
@@ -151,14 +123,14 @@ jobs:
           r-version: 3.6
 
       - name: Install Linux system dependencies
-        if: runner.os == 'Linux'
+        if: startsWith(runner.os, 'Linux')
         env:
           RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
         run: |
           sudo apt-get install libcurl4-openssl-dev libglpk-dev libmagick++-dev libnlopt-dev
 
       - name: Install macOS system dependencies
-        if: matrix.config.os == 'macOS-latest'
+        if: startsWith(runner.os, 'macOS')
         run: |
           ## Enable installing XML from source if needed
           brew install libxml2
@@ -169,36 +141,15 @@ jobs:
           brew install imagemagick@6
 
       - name: Install Windows system dependencies
-        if: runner.os == 'Windows'
+        if: startsWith(runner.os, 'Windows')
         run: |
           ## Edit below if you have any Windows system dependencies
         shell: Rscript {0}
 
-      - name: Session info - pre
-        run: |
-          sessionInfo()
-        shell: Rscript {0}
-
-      - uses: actions/cache@v2
-        if: startsWith(runner.os, 'Linux')
+      - name: Check cache
+        uses: actions/cache@v1
         with:
-          path: ~/.local/share/renv
-          key: ${{ runner.os }}-renv-R-3-6-${{ hashFiles('**/renv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-renv-R-3-6-
-
-      - uses: actions/cache@v2
-        if: startsWith(runner.os, 'macOS')
-        with:
-          path: ~/Library/Application Support/renv
-          key: ${{ runner.os }}-renv-R-3-6-${{ hashFiles('**/renv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-renv-R-3-6-
-
-      - uses: actions/cache@v2
-        if: startsWith(runner.os, 'Windows')
-        with:
-          path: ~\AppData\Local\renv
+          path: /home/runner/work/_temp/Library
           key: ${{ runner.os }}-renv-R-3-6-${{ hashFiles('**/renv.lock') }}
           restore-keys: |
             ${{ runner.os }}-renv-R-3-6-
@@ -206,10 +157,6 @@ jobs:
       - name: Install requirements
         run: |
           source("Setup_36.R")
-        shell: Rscript {0}
-
-      - name: Session info - post
-        run: |
           sessionInfo()
         shell: Rscript {0}
 
