@@ -72,13 +72,29 @@ jobs:
           sessionInfo()
         shell: Rscript {0}
 
-      - name: Cache R packages
-        if: "!contains(github.event.head_commit.message, '/nocache')"
-        uses: actions/cache@v1
+      - uses: actions/cache@v2
+        if: startsWith(runner.os, 'Linux')
         with:
-          path: /home/runner/work/_temp/Library
-          key: ${{ env.cache-version }}-${{ runner.os }}-R-stable-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ env.cache-version }}-${{ runner.os }}-R-stable-
+          path: ~/.local/share/renv
+          key: ${{ runner.os }}-renv-R-stable-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-R-stable-
+
+      - uses: actions/cache@v2
+        if: startsWith(runner.os, 'macOS')
+        with:
+          path: ~/Library/Application Support/renv
+          key: ${{ runner.os }}-renv-R-stable-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-R-stable-
+
+      - uses: actions/cache@v2
+        if: startsWith(runner.os, 'Windows')
+        with:
+          path: ~\AppData\Local\renv
+          key: ${{ runner.os }}-renv-R-stable-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-R-stable-
 
 
       - name: Install requirements
@@ -163,13 +179,29 @@ jobs:
           sessionInfo()
         shell: Rscript {0}
 
-      - name: Cache R packages
-        if: "!contains(github.event.head_commit.message, '/nocache')"
-        uses: actions/cache@v1
+      - uses: actions/cache@v2
+        if: startsWith(runner.os, 'Linux')
         with:
-          path: /home/runner/work/_temp/Library
-          key: ${{ env.cache-version }}-${{ runner.os }}-R-3_6-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ env.cache-version }}-${{ runner.os }}-R-3_6-
+          path: ~/.local/share/renv
+          key: ${{ runner.os }}-renv-R-3-6-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-R-3-6-
+
+      - uses: actions/cache@v2
+        if: startsWith(runner.os, 'macOS')
+        with:
+          path: ~/Library/Application Support/renv
+          key: ${{ runner.os }}-renv-R-3-6-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-R-3-6-
+
+      - uses: actions/cache@v2
+        if: startsWith(runner.os, 'Windows')
+        with:
+          path: ~\AppData\Local\renv
+          key: ${{ runner.os }}-renv-R-3-6-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-R-3-6-
 
       - name: Install requirements
         run: |
